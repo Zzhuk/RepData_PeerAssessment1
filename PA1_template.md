@@ -127,5 +127,52 @@ hist(Imp_stepsPerDay$steps, breaks = Xbreaks, col = "red", main = "Steps per day
 
 ![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
 
+4. Re-calculating mean and median with imputed values.
+
+```r
+mean(Imp_stepsPerDay$steps, na.rm = TRUE)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
+median(Imp_stepsPerDay$steps, na.rm = TRUE)
+```
+
+```
+## [1] 10766.19
+```
+
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+For this part the weekdays() function may be of some help here. Use the dataset with the filled-in missing values for this part.
+
+Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
+
+Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
+
+
+```r
+# Using Imp_activity dataset. Calculate weekdays and add weekday/weekend indicator
+Imp_activity$weekday<-weekdays(strptime(paste(activity$date, " 00:00", sep = ""), format = "%Y-%m-%d %H:%M"))
+
+Imp_activity$weekendInd <- ifelse(Imp_activity$weekday %in% c("Sunday", "Saturday"), "weekend", "weekday")
+
+Imp_stepsPerIntWeek <- aggregate(Imp_activity$imp_steps, list(time = Imp_activity$time, weekendInd = Imp_activity$weekendInd), mean, na.rm = TRUE)
+
+weekday<-Imp_stepsPerIntWeek[Imp_stepsPerIntWeek$weekendInd == "weekday",]
+weekend<-Imp_stepsPerIntWeek[Imp_stepsPerIntWeek$weekendInd == "weekend",]
+
+# plotting
+
+par(mfrow = c(2,1))
+plot(weekday$time, weekday$x, type = "l", col = "orange", main = "weekday average steps", xlab = "time interval", ylab = "steps")
+plot(weekend$time, weekend$x, type = "l", col = "blue", main = "weekend average steps", xlab = "time interval", ylab = "steps")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png) 
+
+
