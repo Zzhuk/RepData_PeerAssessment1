@@ -119,6 +119,11 @@ plot(stepsPerInt$interval, stepsPerInt$mnSteps, type = &quot;l&quot;, col = &quo
 <ol start="2" style="list-style-type: decimal">
 <li>Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?</li>
 </ol>
+<pre class="r"><code>max(stepsPerInt$mnSteps)</code></pre>
+<pre><code>## [1] 206.1698</code></pre>
+<pre class="r"><code>stepsPerInt$interval[stepsPerInt$mnSteps == max(stepsPerInt$mnSteps)]</code></pre>
+<pre><code>## [1] &quot;2015-12-20 08:35:00 PST&quot;</code></pre>
+<p>Highest average steps per interval is 206.2 and occurs on 8:35 time interval.</p>
 </div>
 <div id="imputing-missing-values" class="section level2">
 <h2>Imputing missing values</h2>

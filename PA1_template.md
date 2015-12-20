@@ -76,6 +76,24 @@ plot(stepsPerInt$interval, stepsPerInt$mnSteps, type = "l", col = "blue", xlab =
 
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
+
+```r
+max(stepsPerInt$mnSteps)
+```
+
+```
+## [1] 206.1698
+```
+
+```r
+stepsPerInt$interval[stepsPerInt$mnSteps == max(stepsPerInt$mnSteps)]
+```
+
+```
+## [1] "2015-12-20 08:35:00 PST"
+```
+Highest average steps per interval is 206.2 and occurs on 8:35 time interval.
+
 ## Imputing missing values
 
 
