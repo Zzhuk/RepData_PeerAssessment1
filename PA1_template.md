@@ -11,10 +11,11 @@ This assignment makes use of data from a personal activity monitoring device. Th
 
 ```r
 unzip("activity.zip")
-activity <- read.csv("activity.csv")
+activity<- read.csv("activity.csv", header = TRUE, sep = ',', colClasses = c("numeric", "character", "integer"))
 ```
 
 ## What is mean total number of steps taken per day?
+
 1. Calculate the total number of the steps taken per day.
 
 ```r
@@ -49,8 +50,31 @@ median(stepsPerDay$steps, na.rm = TRUE)
 ```
 
 ## What is the average daily activity pattern?
+1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
 
+
+```r
+# converting invervals to time
+hours <- activity$interval %/% 100
+hours <- ifelse(hours < 10, paste("0", hours, sep = ""), hours)
+
+mins <- activity$interval %% 100
+mins <- ifelse(mins < 10, paste("0", mins, sep = ""), mins)
+
+time <- strptime(paste(hours,":", mins, sep = ""), format = "%H:%M" )
+activity <- cbind(activity, time)
+
+# plotting average steps per 5 mins interval
+
+stepsPerInt <- aggregate(list(mnSteps = activity$steps), by = list(interval = activity$time), FUN = mean, na.rm = TRUE)
+
+plot(stepsPerInt$interval, stepsPerInt$mnSteps, type = "l", col = "blue", xlab = "Time interval", ylab = "Average Steps", main = "Average steps per interval")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+
+2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
 ## Imputing missing values
 
