@@ -67,9 +67,9 @@ activity <- cbind(activity, time)
 
 # plotting average steps per 5 mins interval
 
-stepsPerInt <- aggregate(list(mnSteps = activity$steps), by = list(interval = activity$time), FUN = mean, na.rm = TRUE)
+stepsPerInt <- aggregate(list(mnSteps = activity$steps), by = list(time = activity$time), FUN = mean, na.rm = TRUE)
 
-plot(stepsPerInt$interval, stepsPerInt$mnSteps, type = "l", col = "blue", xlab = "Time interval", ylab = "Average Steps", main = "Average steps per interval")
+plot(stepsPerInt$time, stepsPerInt$mnSteps, type = "l", col = "red", xlab = "Time interval", ylab = "Average Steps", main = "Average steps per interval")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
@@ -86,7 +86,7 @@ max(stepsPerInt$mnSteps)
 ```
 
 ```r
-stepsPerInt$interval[stepsPerInt$mnSteps == max(stepsPerInt$mnSteps)]
+stepsPerInt$time[stepsPerInt$mnSteps == max(stepsPerInt$mnSteps)]
 ```
 
 ```
@@ -96,6 +96,36 @@ Highest average steps per interval is 206.2 and occurs on 8:35 time interval.
 
 ## Imputing missing values
 
+Approach: we will replace missing values with a mean value for the same time interval.
+
+1. Calculate total number of missing values.
+
+```r
+sum(is.na(activity$steps))
+```
+
+```
+## [1] 2304
+```
+
+2. Calculating mean and creating new dataset with imputed values.
+
+```r
+# we already have mean by interval from previous chunk: stepsPerInt$mnSteps. Merging in a new dataset
+Imp_activity <- merge(x = activity, y = stepsPerInt, by.x = "time", by.y = "time", all.x = TRUE)
+Imp_activity$imp_steps<-ifelse(is.na(Imp_activity$steps), Imp_activity$mnSteps, Imp_activity$steps)
+```
+
+3. Plotting new historgram with imputed values. 
+
+```r
+# Replicating histogram from previous chunk (with missing values)
+Imp_stepsPerDay <- aggregate(list(steps = Imp_activity$imp_steps), list(date = Imp_activity$date), FUN = sum, na.rm = TRUE)
+Xbreaks <- seq(from = 0, to = 26000, by = 2000)
+hist(Imp_stepsPerDay$steps, breaks = Xbreaks, col = "red", main = "Steps per day", xlab = "Steps")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
