@@ -22,19 +22,19 @@ activity<- read.csv("activity.csv", header = TRUE, sep = ',', colClasses = c("nu
 
 1. Calculate the total number of the steps taken per day.
 ```{r}
-stepsPerDay <- aggregate(list(steps = activity$steps), list(date = activity$date), FUN = sum, na.rm = TRUE)
+    stepsPerDay <- aggregate(list(steps = activity$steps), list(date = activity$date), FUN = sum, na.rm = TRUE)
 ```
 
 2. Make a histogram of the total number of steps taken each day.
 ```{r}
-Xbreaks <- seq(from = 0, to = 26000, by = 2000)
-hist(stepsPerDay$steps, breaks = Xbreaks, col = "red", main = "Steps per day", xlab = "Steps")
+    Xbreaks <- seq(from = 0, to = 26000, by = 2000)
+    hist(stepsPerDay$steps, breaks = Xbreaks, col = "red", main = "Steps per day", xlab = "Steps")
 ```
 
 3. Calculate and report the mean and median of the total number of stepshis taken per day.
 ```{r}
-mean(stepsPerDay$steps, na.rm = TRUE)
-median(stepsPerDay$steps, na.rm = TRUE)
+    mean(stepsPerDay$steps, na.rm = TRUE)
+    median(stepsPerDay$steps, na.rm = TRUE)
 ```
 
 ## What is the average daily activity pattern?
