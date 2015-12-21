@@ -100,29 +100,32 @@ median(Imp_stepsPerDay$steps, na.rm = TRUE)
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-For this part the weekdays() function may be of some help here. Use the dataset with the filled-in missing values for this part.
-
-Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
-
-Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
+Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
 
 ```{r}
-# Using Imp_activity dataset. Calculate weekdays and add weekday/weekend indicator
+## Using Imp_activity dataset. Calculate weekdays and add weekday/weekend indicator
 Imp_activity$weekday<-weekdays(strptime(paste(activity$date, " 00:00", sep = ""), format = "%Y-%m-%d %H:%M"))
 
 Imp_activity$weekendInd <- ifelse(Imp_activity$weekday %in% c("Sunday", "Saturday"), "weekend", "weekday")
 
 Imp_stepsPerIntWeek <- aggregate(Imp_activity$imp_steps, list(time = Imp_activity$time, weekendInd = Imp_activity$weekendInd), mean, na.rm = TRUE)
 
+# creating separate datasets for weekday and weekends
 weekday<-Imp_stepsPerIntWeek[Imp_stepsPerIntWeek$weekendInd == "weekday",]
 weekend<-Imp_stepsPerIntWeek[Imp_stepsPerIntWeek$weekendInd == "weekend",]
 
-# plotting
+## plotting
 
 par(mfrow = c(2,1))
-plot(weekday$time, weekday$x, type = "l", col = "orange", main = "weekday average steps", xlab = "time interval", ylab = "steps")
-plot(weekend$time, weekend$x, type = "l", col = "blue", main = "weekend average steps", xlab = "time interval", ylab = "steps")
 
+# to align axis
+my.limits<-c(min(Imp_activity$time), max(Imp_activity$time))
+my.limits<-as.numeric(my.limits)
+
+# actual plots
+plot(weekday$time, weekday$x, type = "l", col = "orange", main = "weekday average steps", xlab = "time interval", ylab = "steps", ylim = c(0,250) , xlim = my.limits )
+plot(weekend$time, weekend$x, type = "l", col = "blue", main = "weekend average steps", xlab = "time interval", ylab = "steps", ylim = c(0,250), xlim = my.limits)
 ```
 
+Looks like weekend activity is more evenly spread across a full day whereas weekday activity spikes around 8am and then slows down for the rest of the day. This might be explained by work time schedule of an average person.
 
